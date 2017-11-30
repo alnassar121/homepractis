@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+	title
+
+{% endblock title %}
+
+{% block content %}
+
+<div class="jumbotron">
+  <h1 class="display-3">Home Sweet Home :)</h1>
+	<p class="lead">
+		<a class="btn btn-primary btn-lg" href=" {% url 'more:create' %}" role="button">Create</a>
+		<div class="row">
+
+		<form action="" method="GET">
+			<input type="text" name='q' placeholder="Search posts">
+			<input type="submit" value="Search">
+		</form>
+	</p>
+</div>
+
+	
+	<div class="row">
+
+<h3>{% include "messages.html" %}</h3>
+
+	{% for posts in objects %}
+		<div class="card col-xs-12 col-md-4" style="width: 20rem;">
+			{% if posts.img %}
+				<img class="card-img-top" src="{{posts.img.url}}" alt="Card image cap">
+			{% endif %}
+			
+			<div class="card-body">
+				<h4 class="card-title">{{posts.title}} <small>{{posts.updated|timesince}}</small></h4>
+				<div class="thumbnail">
+					{% if posts.image %}
+						<img src="{{posts.image.url}}" alt="" class="img-responsive">
+					{% endif %}
+				<div class="caption">
+					<h3><a href="{{ posts.get_detail_url }}">{{posts.title}}</a><small> {{posts.publish|timesince }} ago</small></h3>
+					{% if posts.draft %}<h3>Draft</h3>{% endif %}
+					{% if posts.publish > today %}<h3>Future Post</h3>{% endif %}
+					<p>{{posts.content|linebreaks|truncatechars:100}}</p>
+					<p><a href="{{ posts.get_detail_url }}" class="btn btn-primary" role="button">View</a></p>
+				</div>
+			</div>
+				<p class="card-text">{{posts.content|linebreaks|truncatechars:20}}</p>
+				<a href="{{ posts.get_detail_url }}" class="btn btn-info">Read <i class="fa fa-pencil" aria-hidden="true"></i></a>
+				<a href="{% url 'more:update' posts_slug=posts.slug %}" class="btn btn-warning">update <i class="fa fa-book" aria-hidden="true"></i></a>
+				<a href="{% url 'more:delete' posts_slug=posts.slug %}" class="btn btn-danger">delete<i class="fa fa-trash" aria-hidden="true"></i></a>
+			</div>
+		</div>
+	
+	{% endfor %}
+	</div>
+
+	<div class="pagination">
+		<span class="step-links">
+			{% if objects.has_previous %}
+				<a href="?page={{ objects.previous_page_number }}">previous</a>
+			{% endif %}
+
+			<span class="current">
+				Page {{ objects.number }} of {{ objects.paginator.num_pages }}.
+			</span>
+
+			{% if objects.has_next %}
+				<a href="?page={{ objects.next_page_number }}">next</a>
+			{% endif %}
+		</span>
+	</div>
+
+
+
+{% endblock content %}	

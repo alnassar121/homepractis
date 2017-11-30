@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load urlify %}
+
+{% block title %}
+
+	detail
+
+{% endblock title %}
+
+{% block content %}
+
+	<div class="jumbotron">
+	  <h1 class="display-3">Home Sweet Home :)</h1>
+
+	<div class="card text-center">
+		<div class="card-header">
+		Post
+		</div>
+			<div class="card-body">
+			<h4 class="card-title">{{posts.title}}</h4>
+			<p class="card-text">{{posts.content}}</p>
+			{% if posts.image %}
+				<img src="{{posts.image.url}}" alt="" class="img-responsive">
+			{% endif %}
+			<h1>{{posts.title}} <small>{{posts.publish}}</small></h1>
+			{{posts.content| linebreaks}} <br>
+
+			Author: {{posts.author.get_full_name}} <br>
+
+			<a href="{% url 'more:list' %}" class="btn btn-primary">Back to List</a>
+			</div>
+		<div class="card-footer text-muted">
+		<h4 class="card-title">{{posts.title}} <small>{{posts.updated|timesince}}</small></h4>
+			<li>{{posts.updated}}</li>
+			<li>{{posts.timestamp}}</li>
+			{% if  posts.img %}
+				<li><img src="{{posts.img.url}}" alt=""></li>
+			{% endif %}
+			<a class="btn btn-primary" href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}}">
+			<i class="fa fa-facebook-official" aria-hidden="true"></i>
+			</a>
+			
+			<a class="btn btn-info" href="https://twitter.com/home?status={{posts.content|truncatechars:140|urlify}}%20{{request.build_absolute_uri}}">Share on Twitter</a>
+			<li>
+			<a class="btn btn-primary" href="https://www.linkedin.com/shareArticle?mini=true&url={{request.build_absolute_uri}}&title={{posts.title|urlify}}&summary={{posts.content|urlify}}source={{request.build_absolute_uri}}">Share on Linkedin</a>
+			<button class="btn" onclick="ajax_like()"><i id='heart' class="fa fa-heart {% if liked %}text-danger{% endif %}" aria-hidden="true"></i>
+				<span id="likes_count">{{ post_like_count }}</span>
+				<span  class="glyphicon glyphicon-heart {% if liked %}text-danger{% endif %}"  aria-hidden="true">
+				</span>
+			</button>
+			<script type="text/javascript">
+				function ajax_like() {
+					console.log("Like/Unlike clicked!");
+					$.ajax(
+						{
+							type:'GET',
+							url: '{% url "more:like_button" post_id=instance.id %}',
+							error:function(){
+								console.log('error');
+							},
+
+							success: function(data){
+								$("#likes_count").text(data.post_like_count);
+
+								if (data.action==="like"){
+									$("#heart").addClass("text-danger");
+								}else{
+									$("#heart").removeClass("text-danger")
+								}
+								
+							},
+					}
+				);
+			}</script>
+
+	
+			</li>
+			{% include 'django_comments.html' %}
+
+		</div>
+		<div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+		<div class="fb-comments" data-href="{{request.build_detail_uri}}" data-numposts="5"></div>
+	</div>
+
+
+{% endblock content %}	

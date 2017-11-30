@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+
+create
+
+{% endblock title %}
+
+{% block content %}
+
+	<div class="jumbotron">
+	  <h1 class="display-3">Home Sweet Home :)</h1>
+		<p class="lead">
+			
+		</p>
+	
+
+
+
+	<form action="{% url 'more:create' %}" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{form|crispy}}
+		<input type="submit" value"create">
+	</form>
+	</div>
+{% endblock content %}	
