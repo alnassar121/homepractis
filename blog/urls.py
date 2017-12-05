@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^', include('posts.urls', namespace="more")),
     url(r'^comments/', include('django_comments.urls')),
     url(r'^api/', include('api.urls', namespace="api")),
+    url(r'^google/', include('google_app.urls', namespace="google")),
 ]
 
 if settings.DEBUG:

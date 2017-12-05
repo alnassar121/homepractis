@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Place Search</title>
+</head>
+<body>
+	
+	<p>
+		<b>STATUS:</b> {{ response.status }}
+	</p>
+	
+	<hr>
+		<form action=" {% url 'google:text' %} "  method="GET">
+			<input type="text" name="text" placeholder="Enter Text">
+			<input type="submit" name="submit">
+			
+		</form>
+
+		<form action=" {% url 'google:text' %} " method="GET">
+			<input type="hidden" name="next_page_token" value=" {{ response.next_page_token }}">
+			<input type="submit" name="submit" value="Next Page">
+		</form>
+
+	<p>
+		<b>RESULTS:</b>
+	</p>
+
+	<table>
+		{% for result in response.results %}
+			<tr>
+				<td>
+					{{result.name}}
+					<form action="{% url 'google:detail' %}" method="GET" >
+						<input type="hidden" name="reference" value="{{ result.reference }}">
+						<input type="submit" name="submit" value="More Info">
+					</form>
+				</td>
+			</tr>
+				
+		{% endfor %}
+	</table>
+</body>
+</html>

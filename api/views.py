@@ -74,7 +74,7 @@ class PostDeleteAPIView(DestroyAPIView):
 	queryset = Post.objects.all()
 	serializer_class = PostDetailSerializer
 	permission_classes = [IsAuthenticated, IsAdminUser]
-	lookup_fielld = 'slug'
+	lookup_field = 'slug'
 	lookup_url_kwarg = 'post_slug'
 
 class PostCreateAPIView(CreateAPIView):

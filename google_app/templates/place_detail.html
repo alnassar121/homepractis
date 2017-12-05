@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Place Detail</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+	<table>
+		<tr>
+			<td>Name</td>
+			<td><b>{{ response.result.name }}</b></td>
+		</tr>
+		<tr>
+			<td>Address</td>
+			<td><b> {{ response.result.formatted_address }} </b></td>
+		</tr>
+		<tr>
+			<td>Phone Number</td>
+			<td><b> {{ response.result.formatted_phone_number }} </b></td>
+		</tr>
+		<tr>
+			<td>Rating</td>
+			<td><b> {{ response.result.rating }} </b></td>
+		</tr>
+
+	</table>
+		<iframe
+			id="map"
+			width="600"
+			height="450"
+			frameborder="0" style="border:0"
+			src="" allowfullscreen>
+		</iframe>
+
+		<script type="text/javascript">
+
+        function do_something(lat, long) {
+        	console.log("LAT: "+lat+" - LONG: "+long);
+            var map = $("#map");
+            map.attr('src', "https://www.google.com/maps/embed/v1/directions?key={{ api_key }}&origin="+lat+","+long+"&destination={{ response.result.geometry.location.lat }},{{ response.result.geometry.location.lng }}");
+        }
+
+        navigator.geolocation.getCurrentPosition(function(position) {
+            do_something(position.coords.latitude, position.coords.longitude);
+        });
+
+    </script>
+
+   
+
+</body>
+</html>
